@@ -1,0 +1,43 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: mysql
+  namespace: formacion
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: mysql-data
+      containers:
+        - resources:
+            limits:
+              cpu: '1'
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 256Mi
+          name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: '1234'
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+            - containerPort: 33060
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+          image: mysql
+      restartPolicy: Always
