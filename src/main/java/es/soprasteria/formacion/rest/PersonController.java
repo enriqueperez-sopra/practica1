@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/person")
 public class PersonController {
@@ -57,6 +59,7 @@ public class PersonController {
       MediaType.APPLICATION_XML_VALUE
   })
   public ResponseEntity<ResponsePersonDto> findPerson(@ApiParam("NIF del usuario a recuperar") @PathVariable(name="nif") String nif) {
+    log.info("Retrieving person by NIF: {}", nif);
     ResponsePersonDto person = personService.getByNif(nif);
     if (person == null) {
       return ResponseEntity.notFound().build();
